@@ -49,6 +49,8 @@ public class MemberDAO {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@112.221.156.34:12345:XE",
 											   "KH08_KTY",
 											   "KH1234");
+			 
+			// if문 끝까지 ***영속성작업***
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -58,7 +60,7 @@ public class MemberDAO {
 			rset = pstmt.executeQuery();
 			
 			
-			if(rset.next()) {
+			if(rset.next()) { // 매핑과정
 				// 조회결과가 1행있었다
 				loginMember = new MemberDTO(
 						rset.getString("MEMBER_ID"),
@@ -92,6 +94,132 @@ public class MemberDAO {
 		return loginMember;
 		
 	}
+	
+	public int checkId(String memberId){
+		
+		String sql = """
+						SELECT 
+							COUNT(*) 
+						FROM 
+							KH_MEMBER 
+						WHERE 
+							MEMBER_ID = ? 
+					""";
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		int result = 0;
+		try {
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@112.221.156.34:12345:XE",
+					   				"KH08_KTY",
+					   				"KH1234");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, memberId);
+			
+			// return pstmt.executeQuery().next();
+			
+			/*
+			 * case 1 : count(*) 그룹함수를 사용했을 때
+			 * 			무조건 ResultSet이 1행이 존재함
+			 * 			컬럼값이 0 / 1인것으로 조회결과 판별
+			 * 				
+			 * 			rset.next();
+			 *			return rset.getInt("COUNT(*)");
+			 * 
+			 */
+			
+			/*
+			 * case 2 : MEMBER_ID 컬럼을 조회한 경우
+			 * 
+			 *  		rest.getString("MEMBER_ID");
+			 */
+			rset = pstmt.executeQuery();
+			rset.next();
+			result = rset.getInt("COUNT(*)");
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally
+		{
+			try{
+				if(rset != null) rset.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} try{
+			if(pstmt != null) pstmt.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+			} try {
+			if(conn != null) conn.close();
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+	
+	}
+	
+	return result;
+	}
+	
+	public void signUp(MemberDTO member) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = """
+						INSERT 
+						 INTO
+						 	KH_MEMBER 
+						VALUES 
+							(
+							?, 
+							?, 
+							?, 
+							?, 
+							 DEFAULT 
+							)
+					""";
+		
+		try {
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@112.221.156.34:12345:XE",
+	   				"KH08_KTY",
+	   				"KH1234");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, member.getMemberId());
+			pstmt.setString(2, member.getMemberPw());
+			pstmt.setString(3, member.getMemberName());
+			pstmt.setString(4, member.getEmail());
+			
+			pstmt.executeQuery();
+			
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			
+			try {
+				if(pstmt != null) pstmt.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(conn != null) conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	
+	
 }
 
 

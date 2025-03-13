@@ -111,7 +111,7 @@
 	          </li>
           </c:when>
          
-
+		
           <c:otherwise>
 	          <li class="nav-item">
 	          	<a class="nav-link js-scroll-trigger" href="myPage">내정보</a>
