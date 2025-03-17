@@ -1,4 +1,4 @@
-package com.kh.mfw.member.controller;
+package com.kh.mfw.board.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,23 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/join")
-public class JoinController extends HttpServlet {
+@WebServlet("/enrollForm.board")
+public class BoardEnrollFormController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-  
-    public JoinController() {
+       
+
+    public BoardEnrollFormController() {
         super();
-  
+       
     }
 
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// jsp파일에게 회원가입 화면을 만들도록 위임 -> forwarding
-		request.getRequestDispatcher("/WEB-INF/views/member/enroll_form.jsp")
-		.forward(request, response);
+		
+		request.getRequestDispatcher("/WEB-INF/views/board/enroll_form.jsp").forward(request,response);
 	}
 
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		doGet(request, response);

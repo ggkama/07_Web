@@ -3,7 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
   <configuration>
-  
+      <typeAliases>
+       <typeAlias type="com.kh.mfw.member.model.dto.MemberDTO" alias="memberDTO"/>
+       <typeAlias type="com.kh.mfw.board.model.dto.BoardDTO" alias="boardDTO"/>
+    </typeAliases>
+    
 	<!-- 
 		environments : MyBatis를 이용해서 우리가 연동할 DBMS의 정보를 등록하는 태그
 	 -->
@@ -12,7 +16,7 @@
 	 	<environment id="development">
 	 			<!-- 
 	 				* transactionManager : 트랜잭션관련해서 어떻게 작업을 처리할 것인지
-	 				- JDBC : 트랜잭션을 개발자가 직접 관리하겠다. (수동 commin)
+	 				- JDBC : 트랜잭션을 개발자가 직접 관리하겠다. (수동 commit)
 	 				- MANAGED : 개발자가 트랜잭션에 대해 어떤 영향도 끼치지 않겠다.
 	 			 -->
 	 		<transactionManager type="JDBC">	 			 
@@ -33,9 +37,14 @@
 	 		<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
 	 		<property name="url" value="jdbc:oracle:thin:@112.221.156.34:12345:XE"/>
 	 		<property name="username" value="KH08_KTY"/>
-	 		<property name="password" value="KH12345"/>
+	 		<property name="password" value="KH1234"/>
 	 		
 	 		</dataSource>
 	 	</environment>
 	 </environments>
+	 
+	 <mappers>
+	 	<mapper resource="/mappers/member-mapper.xml"/>
+	 	<mapper resource="/mappers/board-mapper.xml"/>
+	 </mappers>
   </configuration>

@@ -5,7 +5,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.kh.mfw.member.model.dto.MemberDTO;
 import com.kh.mfw.member.model.service.MemberService;
@@ -15,52 +17,57 @@ import com.kh.mfw.member.model.service.MemberService;
 public class SignUpController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    
+
     public SignUpController() {
         super();
-      
+  
     }
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 1) 인코딩 설정
+		// 1) 인코딩 설정 (POST 방식일 경우)
 		request.setCharacterEncoding("UTF-8");
 		
+		// 요청처리 -> 사용자가 입력한 값들을 저 멀리있는 DB서버의 KH_MEMBER 테이블에 한 행 insert
 		String memberId = request.getParameter("memberId");
 		String memberPw = request.getParameter("memberPw");
 		String memberName = request.getParameter("memberName");
 		String email = request.getParameter("email");
 		
-		MemberDTO member = new MemberDTO(memberId,memberPw,memberName,email,null);	
-		
-		// 2) 요청처리 -> 사용자가 입력한 값들을
-		// 				DB Server의 KH_MEMBER테이블에 한 행 INSERT
+		MemberDTO member = new MemberDTO(memberId,memberPw,memberName,email,null);
 		int result = new MemberService().signUp(member);
 		
-		
 		String path = request.getContextPath();
+		
 		/*
-		if(result != 0) {
-			// 성공했을 경우 -> 웰컴페이지로 이동
-			// redirect 사용이유 -> 유지보수가 용이해짐
-			// 포워딩을 한다고 작동이 안되는건 아님
-			// 
-			// response.sendRedirect(request.getContextPath()+ "/join");
-			path = request.getContextPath()+ "/join";
-		}else {
+		 * if(result != 0) { // 실패했을 경우 => 회원가입 페이지로 이동 //
+		 * request.getRequestDispatcher("/WEB-INF/views/member/enroll_form.jsp") //
+		 * response.sendRedirect(request.getContextPath()+"/join"); // 유지보수 용이해짐
+		 * 
+		 * } else { // 성공했을 경우 => 웰컴페이지로 이동 //
+		 * response.sendRedirect(request.getContextPath());
+		 * 
+		 * }
+		 */
+		
+		// "중복된 아이디가 존재합니다. 다른 아이디를 입력해주세요."
+		// request.setAttribute("message", "중복된 아이디가 존재합니다. 다른 아이디를 입력해주세요.");
+		
+		//HttpSession session = request.getSession();
+		
+		if(result == 0) {
+			request.getSession().
+			setAttribute("message","중복된 아이디가 존재합니다. 다른 아이디를 입력해주세요.");
 			
-		// 실패했을 경우 -> 회원가입페이지로 이동
-			// response.sendRedirect(request.getContextPath());
-			path = request.getContextPath();
 		}
 		
-		 */
-		response.sendRedirect(result != 0 ? path + "/join" : path);;
+		response.sendRedirect(result !=0 ? path+ "/join" : path);
 		
+
 	}
 
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		doGet(request, response);

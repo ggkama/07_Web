@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!-- 이곳은 헤더  -->
+   
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -20,7 +23,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
   <!-- Custom styles for this template -->
-  <link href="resources/css/agency.min.css" rel="stylesheet">
+  <link href="${pageContext.request.contextPath}/resources/css/agency.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -72,61 +75,67 @@
 </head>
 
 <body id="page-top">
-
+	<c:if test="${ not empty sessionScope.message }">
+	  <script>
+	  		alert('${ sessionScope.message }');
+	  </script>
+	  <c:remove var="message" scope="session"/>
+	</c:if>
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/sfw">
       	<img class="img-fluid" src="https://www.kh-academy.co.kr/resources/images/main/logo.svg" alt="로고없음" style="width:130px; height:50px;" />
       </a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-        메뉴
+        메뉴 
         <i class="fas fa-bars"></i>
       </button>
       
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase ml-auto">
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">HOME</a>
+            <a class="nav-link js-scroll-trigger" href="/sfw">HOME</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#">공지사항</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">게시판</a>
+            <a class="nav-link js-scroll-trigger" href="boards?page=1">게시판</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">사진게시판</a>
+            <a class="nav-link js-scroll-trigger" href="/picBoard">사진게시판</a>
           </li>
           
-          
+          <!-- empty | null eq 기능적 차이
+          	empty -> List, 빈문자열 에도 사용할 수 있다.(범용성이 좋다 %= 아리까리)
+           -->
           <c:choose>
-          
-          <c:when test="${ empty loginMember }">
+          	<c:when test="${ empty sessionScope.loginMember }">
 	          <li class="nav-item">
-	          	<a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#log-in">로그인</a>
+	          <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#log-in">로그인</a>
 	          </li>
 	          <li class="nav-item">
-	          	<a class="nav-link js-scroll-trigger" href="join">회원가입</a>
+	          <a class="nav-link js-scroll-trigger" href="join">회원가입</a>
 	          </li>
-          </c:when>
+          	</c:when>
          
-		
-          <c:otherwise>
+
+          	<c:otherwise>
 	          <li class="nav-item">
-	          	<a class="nav-link js-scroll-trigger" href="myPage">내정보</a>
+	          <a class="nav-link js-scroll-trigger" href="myPage">내정보</a>
 	          </li>
 	          <li class="nav-item">
-	          	<a class="nav-link js-scroll-trigger" href="logout" onclick="return confirm('진짜로 로그아웃 하려고?')">로그아웃</a>
+	          <a class="nav-link js-scroll-trigger" href="logout" onclick="return confirm('진짜로 로그아웃 하려고?')">로그아웃</a>
 	          </li>
-          </c:otherwise>
-          
+          	</c:otherwise>
           </c:choose>
           
         </ul>
       </div>
     </div>
   </nav><br><br><br>
+  
   
   
 
@@ -146,7 +155,7 @@
 			<!-- Modal body -->
 			<div class="modal-body">
 
-				<form action="/mfw/sign-in" name="sign-in" method="post" id="signInForm"
+				<form action="sign-in" name="sign-in" method="post" id="signInForm"
 					style="margin-bottom: 0;">
 					<table style="cellpadding: 0; cellspacing: 0; margin: 0 auto; width: 100%">
 						<tr>
@@ -159,7 +168,7 @@
 								class="form-control tooltipstered" maxlength="10"
 								required="required" aria-required="true"
 								style="margin-bottom: 25px; width: 100%; height: 40px; border: 1px solid #d9d9de"
-								placeholder="최대 15자"></td>
+								placeholder="최대 10자"></td>
 						</tr>
 						<tr>
 							<td style="text-align: left">
@@ -169,9 +178,9 @@
 						<tr>
 							<td><input type="password" size="17" maxlength="20" id="signInPw"
 								name="memberPw" class="form-control tooltipstered" 
-								required="required" aria-required="true"
+							 	required="required" aria-required="true"
 								style="ime-mode: inactive; margin-bottom: 25px; height: 40px; border: 1px solid #d9d9de"
-								placeholder="최소 20자"></td>
+								placeholder="최소 8자"></td>
 						</tr>
 						<tr>
 							<td style="padding-top: 10px; text-align: center">

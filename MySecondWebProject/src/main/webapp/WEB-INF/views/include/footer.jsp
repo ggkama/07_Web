@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,7 +15,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                <span class="copyright">Copyright &copy; By KH C-Class Jong Ro 2025</span>
+                <span class="copyright">Copyright &copy; By KH B-Class Jong Lo 2024</span>
                 </div>
                 <div class="col-md-4">
                 <ul class="list-inline social-buttons">

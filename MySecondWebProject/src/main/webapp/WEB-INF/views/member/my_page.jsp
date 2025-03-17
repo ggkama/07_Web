@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>my_page</title>
 
 <style>
 	#hobby-wrap{
@@ -14,7 +14,9 @@
 	    flex-wrap: nowrap;
 	    align-items: baseline;
 	}
-
+	input[type=checkbox]{
+		margin-left : 50px;
+	}
 </style>
 </head>
 <body>
